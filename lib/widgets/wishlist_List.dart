@@ -19,7 +19,7 @@ class WishlistList extends StatelessWidget {
     return InkWell(
       onTap: () {
         Navigator.of(context)
-            .pushNamed(CourseDetailScreen.routeName, arguments: course!.id);
+            .pushNamed(CourseDetailScreen.routeName, arguments: course?.id);
       },
       child: Container(
         decoration: BoxDecoration(

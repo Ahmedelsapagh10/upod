@@ -17,6 +17,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../constants.dart';
 import '../models/lesson.dart';
+import '../models/section.dart';
 import '../providers/my_courses.dart';
 import '../widgets/common_functions.dart';
 import '../widgets/from_network.dart';
@@ -94,12 +95,15 @@ class _MyCourseDetailScreenState extends State<MyCourseDetailScreen>
       Provider.of<MyCourses>(context, listen: false)
           .fetchCourseSections(widget.courseId)
           .then((_) {
-        final activeSections =
+        List<Section> activeSections =
             Provider.of<MyCourses>(context, listen: false).sectionItems;
         setState(() {
           _isLoading = false;
-          _activeLesson = activeSections.first.mLesson!.first;
         });
+        _activeLesson = (activeSections.first.mLesson!.isNotEmpty ||
+                activeSections.first.mLesson != [])
+            ? activeSections.first.mLesson?.first
+            : null;
       });
     }
     _isInit = false;

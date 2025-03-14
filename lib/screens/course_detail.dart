@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:academy_lms_app/models/course_detail.dart';
 import 'package:academy_lms_app/screens/tab_screen.dart';
@@ -127,15 +128,17 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
   @override
   Widget build(BuildContext context) {
     final courseId = ModalRoute.of(context)!.settings.arguments as int;
+    print('xxxxxxxxxxx ${courseId}');
     final loadedCourse = Provider.of<Courses>(
       context,
       listen: false,
     ).findById(courseId);
-    final loadedCourseDetail = Provider.of<Courses>(
+    CourseDetail? loadedCourseDetail = Provider.of<Courses>(
       context,
       listen: false,
     ).getCourseDetail;
-
+    setState(() {});
+    log("xx ${loadedCourseDetail?.isPurchased == true}");
     customNavBar() {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -187,7 +190,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
                   color: kGreyLightColor, // Adjust the color of the divider
                 ),
               ),
-              loadedCourseDetail.isPurchased!
+              loadedCourseDetail?.isPurchased == true
                   ? SizedBox()
                   : loadedCourse.isPaid == 1
                       ? Padding(
@@ -196,65 +199,265 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
                             elevation: 0,
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             onPressed: () async {
-                              final prefs =
-                                  await SharedPreferences.getInstance();
-                              final authToken =
-                                  (prefs.getString('access_token') ?? '');
-                              if (authToken.isNotEmpty) {
-                                if (loadedCourse.isPaid == 1) {
-                                  if (msg1 == 'please tap again to Buy Now') {
-                                    setState(() {
-                                      msg1 = 'Added to cart';
-                                    });
+                              showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                builder: (context) {
+                                  return Container(
+                                    width: double.infinity,
+                                    padding: EdgeInsets.all(12),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(10.0),
+                                            child: InkWell(
+                                                onTap: () async {
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Icon(
+                                                  Icons.close,
+                                                  color: kRedColor,
+                                                )),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              right: 10.0),
+                                          child: MaterialButton(
+                                            elevation: 0,
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10),
+                                            onPressed: () async {
+                                              final prefs =
+                                                  await SharedPreferences
+                                                      .getInstance();
+                                              final authToken =
+                                                  (prefs.getString(
+                                                          'access_token') ??
+                                                      '');
+                                              if (authToken.isNotEmpty) {
+                                                if (loadedCourse.isPaid == 1) {
+                                                  if (msg1 ==
+                                                      'please tap again to Buy Now') {
+                                                    setState(() {
+                                                      msg1 = 'Added to cart';
+                                                    });
 
-                                    final prefs =
-                                        await SharedPreferences.getInstance();
-                                    final emailPre = prefs.getString('email');
-                                    final passwordPre =
-                                        prefs.getString('password');
-                                    var email = emailPre;
-                                    var password = passwordPre;
-                                    // print(email);
-                                    // print(password);
-                                    // var email = "student@example.com";
-                                    // var password = "12345678";
-                                    DateTime currentDateTime = DateTime.now();
-                                    int currentTimestamp = (currentDateTime
-                                                .millisecondsSinceEpoch /
-                                            1000)
-                                        .floor();
+                                                    final prefs =
+                                                        await SharedPreferences
+                                                            .getInstance();
+                                                    final emailPre = prefs
+                                                        .getString('email');
+                                                    final passwordPre = prefs
+                                                        .getString('password');
+                                                    var email = emailPre;
+                                                    var password = passwordPre;
+                                                    // print(email);
+                                                    // print(password);
+                                                    // var email = "student@example.com";
+                                                    // var password = "12345678";
+                                                    DateTime currentDateTime =
+                                                        DateTime.now();
+                                                    int currentTimestamp =
+                                                        (currentDateTime
+                                                                    .millisecondsSinceEpoch /
+                                                                1000)
+                                                            .floor();
 
-                                    String authToken =
-                                        'Basic ${base64Encode(utf8.encode('$email:$password:$currentTimestamp'))}';
-                                    // print(authToken);
-                                    final url =
-                                        '$baseUrl/payment/web_redirect_to_pay_fee?auth=$authToken&unique_id=academylaravelbycreativeitem';
-                                    // print(url);
-                                    // _launchURL(url);
+                                                    String authToken =
+                                                        'Basic ${base64Encode(utf8.encode('$email:$password:$currentTimestamp'))}';
+                                                    // print(authToken);
+                                                    final url =
+                                                        '$baseUrl/payment/web_redirect_to_pay_fee?auth=$authToken&unique_id=academylaravelbycreativeitem';
+                                                    // print(url);
+                                                    // _launchURL(url);
 
-                                    if (await canLaunchUrl(Uri.parse(url))) {
-                                      await launchUrl(
-                                        Uri.parse(url),
-                                        mode: LaunchMode.externalApplication,
-                                      );
-                                    } else {
-                                      throw 'Could not launch $url';
-                                    }
-                                  } else if (msg1 == 'Added to cart') {
-                                    setState(() {
-                                      msg1 = 'please tap again to Buy Now';
-                                    });
-                                  }
-                                  CommonFunctions.showSuccessToast(msg1);
-                                  Provider.of<Courses>(context, listen: false)
-                                      .toggleCart(loadedCourse.id!, false);
-                                }
+                                                    if (await canLaunchUrl(
+                                                        Uri.parse(url))) {
+                                                      await launchUrl(
+                                                        Uri.parse(url),
+                                                        mode: LaunchMode
+                                                            .externalApplication,
+                                                      );
+                                                    } else {
+                                                      throw 'Could not launch $url';
+                                                    }
+                                                  } else if (msg1 ==
+                                                      'Added to cart') {
+                                                    setState(() {
+                                                      msg1 =
+                                                          'please tap again to Buy Now';
+                                                    });
+                                                  }
+                                                  CommonFunctions
+                                                      .showSuccessToast(msg1);
+                                                  Provider.of<Courses>(context,
+                                                          listen: false)
+                                                      .toggleCart(
+                                                          loadedCourse.id!,
+                                                          false);
+                                                }
 
-                                // CommonFunctions.showSuccessToast('Failed to connect');
-                              } else {
-                                CommonFunctions.showWarningToast(
-                                    'Please login first');
-                              }
+                                                // CommonFunctions.showSuccessToast('Failed to connect');
+                                              } else {
+                                                CommonFunctions
+                                                    .showWarningToast(
+                                                        'Please login first');
+                                              }
+                                            },
+                                            color: kDefaultColor,
+                                            height: 45,
+                                            minWidth: 111,
+                                            textColor: Colors.white,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(13.0),
+                                              side: const BorderSide(
+                                                  color: kDefaultColor),
+                                            ),
+                                            child: const Text(
+                                              'Buy Now',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 13,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 8,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              right: 10.0),
+                                          child: MaterialButton(
+                                            elevation: 0,
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10),
+                                            onPressed: () async {
+                                              Navigator.pop(context);
+
+                                              showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return AlertDialog(
+                                                    title: Container(
+                                                      width: double.infinity,
+                                                      child: Text(
+                                                        'Enter Your Activation Code',
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .titleMedium
+                                                            ?.copyWith(
+                                                                fontSize: 20,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                      ),
+                                                    ),
+                                                    content: SizedBox(
+                                                      width: double.infinity,
+                                                      child: TextField(
+                                                        controller: Provider.of<
+                                                                    Courses>(
+                                                                context,
+                                                                listen: false)
+                                                            .activationCodeController,
+                                                        decoration: InputDecoration(
+                                                            hintText:
+                                                                'Enter Your Activation Code',
+                                                            border:
+                                                                OutlineInputBorder(),
+                                                            contentPadding:
+                                                                EdgeInsets
+                                                                    .symmetric(
+                                                                        horizontal:
+                                                                            3)),
+                                                      ),
+                                                    ),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          Provider.of<Courses>(
+                                                                  context,
+                                                                  listen: false)
+                                                              .activationCodeController
+                                                              .clear();
+
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: Text('Cancel'),
+                                                      ),
+                                                      ElevatedButton(
+                                                        onPressed: () {
+                                                          if (Provider.of<
+                                                                      Courses>(
+                                                                  context,
+                                                                  listen: false)
+                                                              .activationCodeController
+                                                              .text
+                                                              .isEmpty) {
+                                                            CommonFunctions
+                                                                .showWarningToast(
+                                                                    'Enter Your Activation Code');
+                                                          } else {
+                                                            Provider.of<Courses>(
+                                                                    context,
+                                                                    listen:
+                                                                        false)
+                                                                .buyCourseUsingActivationCode(
+                                                                    courseId
+                                                                        .toString(),
+                                                                    context);
+                                                          }
+                                                          // addCodeToWallet(_textController.text);
+                                                        },
+                                                        child: Text(
+                                                          'Send',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  kPrimaryColor),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              );
+
+                                              //!! buy with activation code
+                                            },
+                                            color: kDefaultColor,
+                                            height: 45,
+                                            minWidth: 111,
+                                            textColor: Colors.white,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(13.0),
+                                              side: const BorderSide(
+                                                  color: kDefaultColor),
+                                            ),
+                                            child: const Text(
+                                              'Buy With Activation Code',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 13,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 8,
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              );
                             },
                             color: kDefaultColor,
                             height: 45,
@@ -265,7 +468,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
                               side: const BorderSide(color: kDefaultColor),
                             ),
                             child: const Text(
-                              'Buy Now',
+                              'Buy / Activate',
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 13,
@@ -273,10 +476,8 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
                             ),
                           ),
                         )
-                      : SizedBox(
-                          width: 111,
-                        ),
-              loadedCourseDetail.isPurchased!
+                      : SizedBox(width: 111),
+              loadedCourseDetail?.isPurchased == true
                   ? Padding(
                       padding: const EdgeInsets.only(right: 10.0),
                       child: MaterialButton(
@@ -414,576 +615,603 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
 
     return Scaffold(
       appBar: const AppBarOne(logo: 'light_logo.png'),
-      body: Container(
-        height: MediaQuery.of(context).size.height * 1,
-        color: kBackGroundColor,
-        child: _isLoading
-            ? const Center(
-                child: CircularProgressIndicator(color: kDefaultColor),
-              )
-            : Consumer<Courses>(builder: (context, courses, child) {
-                final loadedCourseDetail = courses.getCourseDetail;
-                return SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Text(loadedCourseDetail.isPurchased.toString()),
-                        Stack(
-                          fit: StackFit.loose,
-                          alignment: Alignment.center,
-                          clipBehavior: Clip.none,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(30),
-                              child: Container(
-                                alignment: Alignment.center,
-                                height:
-                                    MediaQuery.of(context).size.height * .31,
-                                decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  colorFilter: ColorFilter.mode(
-                                      Colors.black.withOpacity(0.6),
-                                      BlendMode.dstATop),
-                                  image: NetworkImage(
-                                    loadedCourse.thumbnail.toString(),
-                                  ),
-                                )),
-                              ),
-                            ),
-                            ClipOval(
-                              child: InkWell(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            PlayVideoFromNetwork(
-                                                courseId: loadedCourse.id!,
-                                                videoUrl:
-                                                    loadedCourse.preview!)),
-                                  );
-                                },
-                                child: Container(
-                                  width: 50,
-                                  height: 50,
-                                  decoration: const BoxDecoration(
-                                    color: Colors.white,
-                                    boxShadow: [kDefaultShadow],
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: Image.asset(
-                                      'assets/images/play.png',
-                                      fit: BoxFit.contain,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              top: 15,
-                              right: 15,
-                              child: SizedBox(
-                                height: 45,
-                                width: 45,
-                                child: FittedBox(
-                                  child: FloatingActionButton(
-                                    onPressed: () {
-                                      if (_isAuth) {
-                                        var msg =
-                                            loadedCourseDetail.isWishlisted;
-                                        showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) =>
-                                              buildPopupDialogWishList(
-                                                  context,
-                                                  loadedCourseDetail
-                                                      .isWishlisted,
-                                                  loadedCourse.id,
-                                                  msg),
-                                        );
-                                      } else {
-                                        CommonFunctions.showSuccessToast(
-                                            'Please login first');
-                                      }
-                                    },
-                                    tooltip: 'Wishlist',
-                                    backgroundColor:
-                                        loadedCourseDetail.isWishlisted!
-                                            ? Colors.white
-                                            : kGreyLightColor.withOpacity(0.3),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(57)),
-                                    child: Icon(
-                                      loadedCourseDetail.isWishlisted!
-                                          ? Icons.favorite
-                                          : Icons.favorite,
-                                      size: 30,
-                                      color: loadedCourseDetail.isWishlisted!
-                                          ? kDefaultColor
-                                          : Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              top: 25.0, left: 5, right: 5),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: Text(
-                                  loadedCourse.title.toString(),
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                              InkWell(
-                                onTap: () async {
-                                  await Share.share(
-                                      loadedCourse.shareableLink.toString());
-                                },
-                                child: SvgPicture.asset(
-                                  'assets/icons/share.svg',
-                                  height: 24,
-                                  width: 16,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              const Padding(
-                                padding: EdgeInsets.only(
-                                  right: 10,
-                                ),
-                                child: Icon(
-                                  Icons.star,
-                                  color: kStarColor,
-                                  size: 18,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(right: 5),
-                                child: Text(
-                                  loadedCourse.average_rating,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                    color: kGreyLightColor,
-                                  ),
-                                ),
-                              ),
-                              Text(
-                                '(${loadedCourse.total_reviews.toString()} Reviews)',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                  color: kGreyLightColor,
-                                ),
-                              ),
-                              const Spacer(),
-                              Text(
-                                loadedCourse.price.toString(),
-                                style: const TextStyle(
-                                    fontSize: 28, fontWeight: FontWeight.w500),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SingleChildScrollView(
+      body: loadedCourseDetail == null
+          ? const Center(
+              child: CircularProgressIndicator(color: kDefaultColor),
+            )
+          : Container(
+              height: MediaQuery.of(context).size.height * 1,
+              color: kBackGroundColor,
+              child: (_isLoading || loadedCourseDetail?.courseId == null)
+                  ? const Center(
+                      child: CircularProgressIndicator(color: kDefaultColor),
+                    )
+                  : Consumer<Courses>(builder: (context, courses, child) {
+                      final loadedCourseDetail = courses.getCourseDetail;
+                      return SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Container(
-                                decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: kBackButtonBorderColor
-                                          .withOpacity(0.07),
-                                      blurRadius: 15,
-                                      offset: const Offset(0, 0),
+                            children: [
+                              // Text(loadedCourseDetail.isPurchased.toString()),
+                              Stack(
+                                fit: StackFit.loose,
+                                alignment: Alignment.center,
+                                clipBehavior: Clip.none,
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(30),
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              .31,
+                                      decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                        fit: BoxFit.cover,
+                                        colorFilter: ColorFilter.mode(
+                                            Colors.black.withOpacity(0.6),
+                                            BlendMode.dstATop),
+                                        image: NetworkImage(
+                                          loadedCourse.thumbnail.toString(),
+                                        ),
+                                      )),
+                                    ),
+                                  ),
+                                  ClipOval(
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  PlayVideoFromNetwork(
+                                                      courseId:
+                                                          loadedCourse.id!,
+                                                      videoUrl: loadedCourse
+                                                          .preview!)),
+                                        );
+                                      },
+                                      child: Container(
+                                        width: 50,
+                                        height: 50,
+                                        decoration: const BoxDecoration(
+                                          color: Colors.white,
+                                          boxShadow: [kDefaultShadow],
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(5.0),
+                                          child: Image.asset(
+                                            'assets/images/play.png',
+                                            fit: BoxFit.contain,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: 15,
+                                    right: 15,
+                                    child: SizedBox(
+                                      height: 45,
+                                      width: 45,
+                                      child: FittedBox(
+                                        child: FloatingActionButton(
+                                          onPressed: () {
+                                            if (_isAuth) {
+                                              var msg = loadedCourseDetail
+                                                  ?.isWishlisted;
+                                              showDialog(
+                                                context: context,
+                                                builder: (BuildContext
+                                                        context) =>
+                                                    buildPopupDialogWishList(
+                                                        context,
+                                                        loadedCourseDetail
+                                                            ?.isWishlisted,
+                                                        loadedCourse.id,
+                                                        msg),
+                                              );
+                                            } else {
+                                              CommonFunctions.showSuccessToast(
+                                                  'Please login first');
+                                            }
+                                          },
+                                          heroTag: "btn1",
+                                          tooltip: 'Wishlist',
+                                          backgroundColor: loadedCourseDetail
+                                                      ?.isWishlisted ==
+                                                  true
+                                              ? Colors.white
+                                              : kGreyLightColor
+                                                  .withOpacity(0.3),
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(57)),
+                                          child: Icon(
+                                            loadedCourseDetail?.isWishlisted ==
+                                                    true
+                                                ? Icons.favorite
+                                                : Icons.favorite,
+                                            size: 30,
+                                            color: loadedCourseDetail
+                                                        ?.isWishlisted ==
+                                                    true
+                                                ? kDefaultColor
+                                                : Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 25.0, left: 5, right: 5),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        loadedCourse.title.toString(),
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                    InkWell(
+                                      onTap: () async {
+                                        await Share.share(loadedCourse
+                                            .shareableLink
+                                            .toString());
+                                      },
+                                      child: SvgPicture.asset(
+                                        'assets/icons/share.svg',
+                                        height: 24,
+                                        width: 16,
+                                      ),
                                     ),
                                   ],
                                 ),
-                                child: Card(
-                                  elevation: 0,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16),
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: TabBar(
-                                          controller: _tabController,
-                                          indicatorSize:
-                                              TabBarIndicatorSize.tab,
-                                          indicator: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(13),
-                                              color: kDefaultColor),
-                                          // unselectedLabelColor: kTextColor,
-                                          unselectedLabelStyle: const TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 13,
-                                          ),
-                                          labelStyle: const TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 13,
-                                            color: kWhiteColor,
-                                          ),
-                                          padding: const EdgeInsets.all(10),
-                                          dividerHeight: 0,
-                                          // labelColor: Colors.white,
-                                          tabs: const <Widget>[
-                                            Tab(
-                                              child: Text(
-                                                "Includes",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 14,
-                                                ),
-                                              ),
-                                            ),
-                                            Tab(
-                                              child: Align(
-                                                alignment: Alignment.center,
-                                                child: Text(
-                                                  "Outcomes",
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.w500,
-                                                    fontSize: 14,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            Tab(
-                                              child: Align(
-                                                alignment: Alignment.center,
-                                                child: Text(
-                                                  "Required",
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.w500,
-                                                    fontSize: 14,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    const Padding(
+                                      padding: EdgeInsets.only(
+                                        right: 10,
+                                      ),
+                                      child: Icon(
+                                        Icons.star,
+                                        color: kStarColor,
+                                        size: 18,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(right: 5),
+                                      child: Text(
+                                        loadedCourse.average_rating,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w400,
+                                          color: kGreyLightColor,
                                         ),
                                       ),
-                                      Container(
-                                        width: double.infinity,
-                                        height: 215,
-                                        padding: const EdgeInsets.only(
-                                            right: 10,
-                                            left: 10,
-                                            top: 0,
-                                            bottom: 10),
-                                        child: TabBarView(
-                                          controller: _tabController,
-                                          children: [
-                                            TabViewDetails(
-                                              titleText: 'What is Included',
-                                              listText: loadedCourseDetail
-                                                  .courseIncludes,
-                                            ),
-                                            TabViewDetails(
-                                              titleText: 'What you will learn',
-                                              listText: loadedCourseDetail
-                                                  .courseOutcomes,
-                                            ),
-                                            TabViewDetails(
-                                              titleText: 'Course Requirements',
-                                              listText: loadedCourseDetail
-                                                  .courseRequirements,
-                                            ),
-                                          ],
-                                        ),
+                                    ),
+                                    Text(
+                                      '(${loadedCourse.total_reviews.toString()} Reviews)',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400,
+                                        color: kGreyLightColor,
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                    const Spacer(),
+                                    Text(
+                                      loadedCourse.price.toString(),
+                                      style: const TextStyle(
+                                          fontSize: 28,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              const Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 20, horizontal: 10),
-                                child: Text(
-                                  'Course curriculum',
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ),
-                              ListView.builder(
-                                key: Key('builder ${selected.toString()}'),
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: loadedCourseDetail.mSection!.length,
-                                itemBuilder: (ctx, index) {
-                                  final section =
-                                      loadedCourseDetail.mSection![index];
-                                  return Padding(
-                                    padding: const EdgeInsets.only(bottom: 5.0),
-                                    child: Container(
+                              SingleChildScrollView(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Container(
                                       decoration: BoxDecoration(
                                         boxShadow: [
                                           BoxShadow(
                                             color: kBackButtonBorderColor
-                                                .withOpacity(0.05),
-                                            blurRadius: 25,
+                                                .withOpacity(0.07),
+                                            blurRadius: 15,
                                             offset: const Offset(0, 0),
                                           ),
                                         ],
                                       ),
                                       child: Card(
-                                        elevation: 0.0,
-                                        child: ExpansionTile(
-                                          key: Key(index.toString()),
-                                          initiallyExpanded: index == selected,
-                                          onExpansionChanged: ((newState) {
-                                            if (newState) {
-                                              setState(() {
-                                                selected = index;
-                                              });
-                                            } else {
-                                              setState(() {
-                                                selected = -1;
-                                              });
-                                            }
-                                          }),
-                                          iconColor: kDefaultColor,
-                                          collapsedIconColor: kSelectItemColor,
-                                          trailing: Icon(
-                                            selected == index
-                                                ? Icons
-                                                    .keyboard_arrow_up_rounded
-                                                : Icons
-                                                    .keyboard_arrow_down_rounded,
-                                            size: 35,
-                                          ),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadiusDirectional
-                                                    .circular(16),
-                                            side: const BorderSide(
-                                                color: Colors.white),
-                                          ),
-                                          title: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 5.0),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                      vertical: 5.0,
-                                                    ),
+                                        elevation: 0,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(16),
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            SizedBox(
+                                              width: double.infinity,
+                                              child: TabBar(
+                                                controller: _tabController,
+                                                indicatorSize:
+                                                    TabBarIndicatorSize.tab,
+                                                indicator: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            13),
+                                                    color: kDefaultColor),
+                                                // unselectedLabelColor: kTextColor,
+                                                unselectedLabelStyle:
+                                                    const TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 13,
+                                                ),
+                                                labelStyle: const TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 13,
+                                                  color: kWhiteColor,
+                                                ),
+                                                padding:
+                                                    const EdgeInsets.all(10),
+                                                dividerHeight: 0,
+                                                // labelColor: Colors.white,
+                                                tabs: const <Widget>[
+                                                  Tab(
                                                     child: Text(
-                                                      '${index + 1}. ${HtmlUnescape().convert(section.title.toString())}',
-                                                      style: const TextStyle(
-                                                        fontSize: 16,
+                                                      "Includes",
+                                                      style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.w500,
+                                                        fontSize: 14,
                                                       ),
                                                     ),
                                                   ),
-                                                ),
-                                                Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(vertical: 5.0),
-                                                  child: Row(
-                                                    children: [
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: kTimeBackColor
-                                                                .withOpacity(
-                                                                    0.12),
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        5),
-                                                          ),
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .symmetric(
-                                                            vertical: 5.0,
-                                                          ),
-                                                          child: Align(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: Text(
-                                                              section
-                                                                  .totalDuration
-                                                                  .toString(),
-                                                              style:
-                                                                  const TextStyle(
-                                                                fontSize: 10,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w400,
-                                                                color:
-                                                                    kTimeColor,
-                                                              ),
-                                                            ),
-                                                          ),
+                                                  Tab(
+                                                    child: Align(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Text(
+                                                        "Outcomes",
+                                                        style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontSize: 14,
                                                         ),
                                                       ),
-                                                      const SizedBox(
-                                                        width: 10.0,
-                                                      ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color:
-                                                                kLessonBackColor
-                                                                    .withOpacity(
-                                                                        0.12),
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        5),
-                                                          ),
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .symmetric(
-                                                            vertical: 5.0,
-                                                          ),
-                                                          child: Align(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: Text(
-                                                              '${section.mLesson!.length} Lessons',
-                                                              style:
-                                                                  const TextStyle(
-                                                                fontSize: 10,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w400,
-                                                                color:
-                                                                    kLessonColor,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      const Expanded(
-                                                          flex: 1,
-                                                          child: Text("")),
-                                                    ],
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
+                                                  Tab(
+                                                    child: Align(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Text(
+                                                        "Required",
+                                                        style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontSize: 14,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                          children: [
-                                            ListView.builder(
-                                              shrinkWrap: true,
-                                              physics:
-                                                  const NeverScrollableScrollPhysics(),
-                                              itemCount:
-                                                  section.mLesson!.length,
-                                              itemBuilder: (ctx, index) {
-                                                return Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: 15.0),
-                                                  child: Column(
-                                                    children: [
-                                                      LessonListItem(
-                                                        lesson: section
-                                                            .mLesson![index],
-                                                        courseId:
-                                                            loadedCourseDetail
-                                                                .courseId!,
-                                                      ),
-                                                      if ((section.mLesson!
-                                                                  .length -
-                                                              1) !=
-                                                          index)
-                                                        Divider(
-                                                          color: kGreyLightColor
-                                                              .withOpacity(0.3),
-                                                        ),
-                                                      if ((section.mLesson!
-                                                                  .length -
-                                                              1) ==
-                                                          index)
-                                                        const SizedBox(
-                                                            height: 10),
-                                                    ],
+                                            Container(
+                                              width: double.infinity,
+                                              height: 215,
+                                              padding: const EdgeInsets.only(
+                                                  right: 10,
+                                                  left: 10,
+                                                  top: 0,
+                                                  bottom: 10),
+                                              child: TabBarView(
+                                                controller: _tabController,
+                                                children: [
+                                                  TabViewDetails(
+                                                    titleText:
+                                                        'What is Included',
+                                                    listText: loadedCourseDetail
+                                                        ?.courseIncludes,
                                                   ),
-                                                );
-                                              },
+                                                  TabViewDetails(
+                                                    titleText:
+                                                        'What you will learn',
+                                                    listText: loadedCourseDetail
+                                                        ?.courseOutcomes,
+                                                  ),
+                                                  TabViewDetails(
+                                                    titleText:
+                                                        'Course Requirements',
+                                                    listText: loadedCourseDetail
+                                                        ?.courseRequirements,
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ],
                                         ),
                                       ),
                                     ),
-                                  );
-                                },
-                              ),
-                              const SizedBox(
-                                height: 10,
+                                    const Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 20, horizontal: 10),
+                                      child: Text(
+                                        'Course curriculum',
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
+                                    ListView.builder(
+                                      key:
+                                          Key('builder ${selected.toString()}'),
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      itemCount:
+                                          loadedCourseDetail?.mSection!.length,
+                                      itemBuilder: (ctx, index) {
+                                        final section = loadedCourseDetail
+                                            ?.mSection![index];
+                                        return Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 5.0),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: kBackButtonBorderColor
+                                                      .withOpacity(0.05),
+                                                  blurRadius: 25,
+                                                  offset: const Offset(0, 0),
+                                                ),
+                                              ],
+                                            ),
+                                            child: Card(
+                                              elevation: 0.0,
+                                              child: ExpansionTile(
+                                                key: Key(index.toString()),
+                                                initiallyExpanded:
+                                                    index == selected,
+                                                onExpansionChanged:
+                                                    ((newState) {
+                                                  if (newState) {
+                                                    setState(() {
+                                                      selected = index;
+                                                    });
+                                                  } else {
+                                                    setState(() {
+                                                      selected = -1;
+                                                    });
+                                                  }
+                                                }),
+                                                iconColor: kDefaultColor,
+                                                collapsedIconColor:
+                                                    kSelectItemColor,
+                                                trailing: Icon(
+                                                  selected == index
+                                                      ? Icons
+                                                          .keyboard_arrow_up_rounded
+                                                      : Icons
+                                                          .keyboard_arrow_down_rounded,
+                                                  size: 35,
+                                                ),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadiusDirectional
+                                                          .circular(16),
+                                                  side: const BorderSide(
+                                                      color: Colors.white),
+                                                ),
+                                                title: Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(vertical: 5.0),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Align(
+                                                        alignment: Alignment
+                                                            .centerLeft,
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                            vertical: 5.0,
+                                                          ),
+                                                          child: Text(
+                                                            '${index + 1}. ${HtmlUnescape().convert(section?.title.toString() ?? '')}',
+                                                            style:
+                                                                const TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                vertical: 5.0),
+                                                        child: Row(
+                                                          children: [
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child: Container(
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color: kTimeBackColor
+                                                                      .withOpacity(
+                                                                          0.12),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              5),
+                                                                ),
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .symmetric(
+                                                                  vertical: 5.0,
+                                                                ),
+                                                                child: Align(
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .center,
+                                                                  child: Text(
+                                                                    section?.totalDuration
+                                                                            .toString() ??
+                                                                        '',
+                                                                    style:
+                                                                        const TextStyle(
+                                                                      fontSize:
+                                                                          10,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w400,
+                                                                      color:
+                                                                          kTimeColor,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            const SizedBox(
+                                                              width: 10.0,
+                                                            ),
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child: Container(
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color: kLessonBackColor
+                                                                      .withOpacity(
+                                                                          0.12),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              5),
+                                                                ),
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .symmetric(
+                                                                  vertical: 5.0,
+                                                                ),
+                                                                child: Align(
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .center,
+                                                                  child: Text(
+                                                                    '${section?.mLesson?.length ?? '-'} Lessons',
+                                                                    style:
+                                                                        const TextStyle(
+                                                                      fontSize:
+                                                                          10,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w400,
+                                                                      color:
+                                                                          kLessonColor,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            const Expanded(
+                                                                flex: 1,
+                                                                child:
+                                                                    Text("")),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                children: [
+                                                  ListView.builder(
+                                                    shrinkWrap: true,
+                                                    physics:
+                                                        const NeverScrollableScrollPhysics(),
+                                                    itemCount: section
+                                                        ?.mLesson?.length,
+                                                    itemBuilder: (ctx, index) {
+                                                      return Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal:
+                                                                    15.0),
+                                                        child: Column(
+                                                          children: [
+                                                            LessonListItem(
+                                                              lesson: section
+                                                                      ?.mLesson![
+                                                                  index],
+                                                              courseId:
+                                                                  loadedCourseDetail
+                                                                          ?.courseId ??
+                                                                      0,
+                                                            ),
+                                                            if (((section?.mLesson
+                                                                            ?.length ??
+                                                                        0) -
+                                                                    1) !=
+                                                                index)
+                                                              Divider(
+                                                                color: kGreyLightColor
+                                                                    .withOpacity(
+                                                                        0.3),
+                                                              ),
+                                                            if (((section?.mLesson
+                                                                            ?.length ??
+                                                                        0) -
+                                                                    1) ==
+                                                                index)
+                                                              const SizedBox(
+                                                                  height: 10),
+                                                          ],
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                );
-              }),
-      ),
-      floatingActionButton: Container(
-        margin: const EdgeInsets.only(bottom: 15.0),
-        padding: const EdgeInsets.only(right: 10.0, bottom: 18),
-        child: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const FilterScreen(),
-                ));
-          },
-          backgroundColor: kWhiteColor,
-          shape: RoundedRectangleBorder(
-              side: const BorderSide(width: 1, color: kDefaultColor),
-              borderRadius: BorderRadius.circular(100)),
-          child: SvgPicture.asset(
-            'assets/icons/filter.svg',
-            colorFilter: const ColorFilter.mode(
-              kBlackColor,
-              BlendMode.srcIn,
+                      );
+                    }),
             ),
-          ),
-        ),
-      ),
       bottomNavigationBar: customNavBar(),
     );
   }

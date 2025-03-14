@@ -43,4 +43,20 @@ class CommonFunctions {
         textColor: kToastTextColor,
         fontSize: 16.0);
   }
+
+  // Method to show the loading indicator
+  static void showLoadingIndicator(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Prevent user from dismissing the dialog
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+      },
+    );
+  }
 }

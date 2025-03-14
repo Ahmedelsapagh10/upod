@@ -300,6 +300,7 @@ class _EditPrfileScreenState extends State<EditPrfileScreen> {
                                   padding: const EdgeInsets.all(3.0),
                                   child: ClipOval(
                                     child: FloatingActionButton(
+                                      heroTag: "btn6",
                                       elevation: 1,
                                       onPressed: () {
                                         _pickImage();

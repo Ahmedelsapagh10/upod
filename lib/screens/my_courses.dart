@@ -14,7 +14,6 @@ class MyCoursesScreen extends StatefulWidget {
 }
 
 class _MyCoursesScreenState extends State<MyCoursesScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -32,7 +31,8 @@ class _MyCoursesScreenState extends State<MyCoursesScreen> {
             child: Column(
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5.0, vertical: 10),
                   width: double.infinity,
                   child: const Text(
                     'My Courses',
@@ -92,5 +92,4 @@ class _MyCoursesScreenState extends State<MyCoursesScreen> {
       },
     );
   }
-  
 }

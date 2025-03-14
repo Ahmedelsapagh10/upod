@@ -1,4 +1,4 @@
-class   Course {
+class Course {
   int? id;
   String? title;
   String? thumbnail;

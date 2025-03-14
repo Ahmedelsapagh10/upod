@@ -13,7 +13,6 @@ import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class TabsScreen extends StatefulWidget {
   final int pageIndex;
 
@@ -61,17 +60,15 @@ class _TabsScreenState extends State<TabsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const AppBarOne(logo: 'light_logo.png'),
-     
-      body: 
-      _isInit
+      body: _isInit
           ? Center(child: CircularProgressIndicator())
-          :
-           IndexedStack(
+          : IndexedStack(
               index: _selectedPageIndex,
               children: _pages(),
             ),
       floatingActionButton: _selectedPageIndex != 2
           ? FloatingActionButton(
+              heroTag: "btn7",
               onPressed: () {
                 Navigator.push(
                     context,
@@ -182,4 +179,3 @@ class _TabsScreenState extends State<TabsScreen> {
     );
   }
 }
-

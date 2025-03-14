@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 const baseUrl =
-    'https://upod-edu.com/'; // Example: const BASE_URL = 'http://creativeitem.com/academy';
+    'https://upod-edu.com'; // Example: const BASE_URL = 'http://creativeitem.com/academy';
 
 // list of colors that we use in our app
 const kWhiteColor = Colors.white;
@@ -95,3 +95,9 @@ const Map configs = {
   'MEETING_SDK_CLIENT_KEY': '7M6Wg3sxRP6fRudLqqskYQ',
   'MEETING_SDK_CLIENT_SECRET': 'z1NzSPndVwGqmquWnoJgza2i2R4GJOai',
 };
+
+double? extractNumber(String input) {
+  RegExp regExp = RegExp(r'\d+\.?\d*');
+  Match? match = regExp.firstMatch(input);
+  return match != null ? double.tryParse(match.group(0)!) : null;
+}

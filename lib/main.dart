@@ -77,6 +77,8 @@ class MyApp extends StatelessWidget {
           title: 'UPOD',
           theme: ThemeData(
             fontFamily: 'Poppins',
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+
             // colorScheme: const ColorScheme.light(primary: kWhiteColor),
             useMaterial3: true,
           ),

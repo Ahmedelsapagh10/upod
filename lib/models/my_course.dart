@@ -18,6 +18,7 @@ class MyCourse {
   String? enableDripContent;
   dynamic total_reviews;
   dynamic average_rating;
+//
 
   MyCourse({
     @required this.id,

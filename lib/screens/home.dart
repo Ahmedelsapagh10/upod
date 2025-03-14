@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:academy_lms_app/screens/course_detail.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    topCourses = Provider.of<Courses>(context, listen: false).topItems;
     super.initState();
   }
 
@@ -34,9 +37,8 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {});
 
       Provider.of<Courses>(context).fetchTopCourses().then((_) {
-        setState(() {
-          topCourses = Provider.of<Courses>(context, listen: false).topItems;
-        });
+        topCourses = Provider.of<Courses>(context, listen: false).topItems;
+        setState(() {});
       });
     }
     _isInit = false;
@@ -146,12 +148,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             itemCount: topCourses.length,
                             itemBuilder: (ctx, index) {
                               final course = topCourses[index];
-                              final courseId = course.id;
+                              final courseId = int.parse(course.id.toString());
 
                               return Padding(
                                 padding: const EdgeInsets.only(right: 8.0),
                                 child: InkWell(
                                   onTap: () {
+                                    log('00000000 $courseId');
                                     Navigator.of(context).pushNamed(
                                       CourseDetailScreen.routeName,
                                       arguments: courseId,

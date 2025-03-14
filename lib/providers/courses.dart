@@ -1,8 +1,10 @@
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:academy_lms_app/models/cart_tools_model.dart';
+import 'package:academy_lms_app/widgets/common_functions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -33,8 +35,10 @@ class Courses with ChangeNotifier {
     return [..._topItems];
   }
 
-  CourseDetail get getCourseDetail {
-    return _courseDetailsitems.first;
+  CourseDetail? get getCourseDetail {
+    return (_courseDetailsitems == [] || _courseDetailsitems.isEmpty)
+        ? null
+        : _courseDetailsitems.first;
   }
 
   CourseDetails get courseDetails {
@@ -62,9 +66,9 @@ class Courses with ChangeNotifier {
       if (extractedData == null) {
         return;
       }
-      // print(extractedData);
       _topItems = buildCourseList(extractedData);
       notifyListeners();
+      print("00000 ${_topItems.length}");
     } catch (error) {
       rethrow;
     }
@@ -196,7 +200,7 @@ class Courses with ChangeNotifier {
         thumbnail: courseData['thumbnail'],
         preview: courseData['preview'],
         price: courseData['price'],
-        price_cart: courseData['price_cart'],
+        price_cart: extractNumber(courseData['price_cart'].toString()),
         isPaid: courseData['is_paid'],
         instructor: courseData['instructor_name'],
         instructorImage: courseData['instructor_image'],
@@ -350,7 +354,7 @@ class Courses with ChangeNotifier {
     final token = (prefs.getString('access_token') ?? '');
 
     var url = "$baseUrl/api/course_details_by_id?course_id=$courseId";
-    print(url);
+    print('url : $url authToken $token courseId $courseId}');
 
     try {
       final response = await http.get(Uri.parse(url), headers: {
@@ -433,5 +437,47 @@ class Courses with ChangeNotifier {
     }
     // print(loadedLessons.first.title);
     return loadedLessons;
+  }
+
+  TextEditingController activationCodeController = TextEditingController();
+
+  buyCourseUsingActivationCode(String? courseId, BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    final authToken = (prefs.getString('access_token') ?? '');
+    const url = '$baseUrl/api/course_enroll_activation_code';
+    try {
+      CommonFunctions.showLoadingIndicator(context);
+      print(
+          'url : $url authToken $authToken courseId $courseId activationCodeController ${activationCodeController.text}');
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $authToken',
+        },
+        body: json.encode({
+          'course_id': courseId,
+          'activation_code': activationCodeController.text,
+        }),
+      );
+      final responseData = json.decode(response.body);
+      if (responseData['status'] == 'false') {
+        print('error $responseData');
+
+        CommonFunctions.showWarningToast(responseData['message'].toString());
+      } else {
+        print('done $responseData');
+
+        CommonFunctions.showSuccessToast(
+            'Course enrolled successfully'.toString());
+        Navigator.pop(context);
+        await fetchCourseDetailById(int.parse(courseId!));
+      }
+      Navigator.pop(context);
+      notifyListeners();
+    } catch (error) {
+      rethrow;
+    }
   }
 }

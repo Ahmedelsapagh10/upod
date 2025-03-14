@@ -32,6 +32,8 @@ class MyCourses with ChangeNotifier {
   Future<void> fetchMyCourses() async {
     final prefs = await SharedPreferences.getInstance();
     final authToken = (prefs.getString('access_token') ?? '');
+
+    print('5555 $authToken');
     var url = '$baseUrl/api/my_courses';
     try {
       final response = await http.get(Uri.parse(url), headers: {
@@ -46,6 +48,8 @@ class MyCourses with ChangeNotifier {
       }
       // print(extractedData);
       _items = buildMyCourseList(extractedData);
+      print('5555 _items.length ${_items.length}');
+
       notifyListeners();
     } catch (error) {
       rethrow;
@@ -71,7 +75,7 @@ class MyCourses with ChangeNotifier {
         totalNumberOfLessons: courseData['total_number_of_lessons'],
         totalNumberOfCompletedLessons:
             courseData['total_number_of_completed_lessons'],
-        enableDripContent: courseData['enable_drip_content'],
+        enableDripContent: courseData['enable_drip_content'].toString(),
         total_reviews: courseData['total_reviews'],
         average_rating: courseData['average_rating'],
       ));

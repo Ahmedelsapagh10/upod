@@ -57,7 +57,7 @@ class _LoginScreenState extends State<SignUpScreen> {
           'password_confirmation': password_confirmation,
         }),
       );
-    
+
       if (responses.statusCode == 200) {
         final responseData = jsonDecode(responses.body);
 
@@ -402,13 +402,11 @@ class _LoginScreenState extends State<SignUpScreen> {
                                       await Navigator.of(context)
                                           .pushReplacement(
                                         MaterialPageRoute(
-                                            builder: (context) =>
-                                                TabsScreen(
+                                            builder: (context) => TabsScreen(
                                                   pageIndex: 0,
                                                 )),
                                       );
                                     }
-                                  
                                   },
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 20, vertical: 16),

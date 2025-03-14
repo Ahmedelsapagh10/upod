@@ -131,17 +131,17 @@ class _VerificationScreenState extends State<VerificationScreen> {
                         height: 40,
                       ),
                       const Text(
-                        'We have sent the verification code to the email', 
+                        'We have sent the verification code to the email',
                         style: TextStyle(
                           color: kGreyLightColor,
-                          fontSize: 15, 
+                          fontSize: 15,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
                       const Text(
-                        'creativeitem@gmail.com', 
+                        'creativeitem@gmail.com',
                         style: TextStyle(
-                          fontSize: 16, 
+                          fontSize: 16,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -199,8 +199,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                                     if (_value.isEmpty) {
                                       setState(() {
                                         _selectedFocus = _focus[0];
-                                        _selectedController =
-                                            _controllers[0];
+                                        _selectedController = _controllers[0];
                                       });
                                       FocusScope.of(context)
                                           .requestFocus(_selectedFocus);
@@ -236,8 +235,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                                       } else {
                                         FocusScope.of(context).unfocus();
                                         _selectedFocus = _focus[0];
-                                        _selectedController =
-                                            _controllers[0];
+                                        _selectedController = _controllers[0];
                                       }
                                     } // if val isEmpty (i.e number was deleted from the box) do nothing
                                     // print(_value);
@@ -254,36 +252,37 @@ class _VerificationScreenState extends State<VerificationScreen> {
                         child: SizedBox(
                           width: double.infinity,
                           child: _isLoading
-                            ? const Center(child: CircularProgressIndicator())
-                            : Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 15.0),
-                                child: MaterialButton(
-                                  elevation: 0,
-                                  color: kDefaultColor,
-                                  onPressed: () {},
+                              ? const Center(child: CircularProgressIndicator())
+                              : Padding(
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 16),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadiusDirectional.circular(16),
-                                    // side: const BorderSide(color: kRedColor),
-                                  ),
-                                  child: const Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        'Verify',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w500,
+                                      vertical: 15.0),
+                                  child: MaterialButton(
+                                    elevation: 0,
+                                    color: kDefaultColor,
+                                    onPressed: () {},
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 16),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadiusDirectional.circular(16),
+                                      // side: const BorderSide(color: kRedColor),
+                                    ),
+                                    child: const Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Verify',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w500,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
                         ),
                       ),
                       const SizedBox(height: 30),
@@ -293,18 +292,18 @@ class _VerificationScreenState extends State<VerificationScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'Didn’t get the code?', 
+                              'Didn’t get the code?',
                               style: TextStyle(
                                 color: kGreyLightColor,
-                                fontSize: 16, 
+                                fontSize: 16,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
                             Text(
-                              ' Other Option', 
+                              ' Other Option',
                               style: TextStyle(
                                 color: kSignUpTextColor,
-                                fontSize: 16, 
+                                fontSize: 16,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),

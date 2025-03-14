@@ -152,12 +152,14 @@ class _CartScreenState extends State<CartScreen> {
                   future: Provider.of<Courses>(context, listen: false)
                       .fetchCartlist(),
                   builder: (ctx, dataSnapshot) {
-                    if (dataSnapshot.connectionState == ConnectionState.waiting) {
+                    if (dataSnapshot.connectionState ==
+                        ConnectionState.waiting) {
                       return SizedBox(
                         height: MediaQuery.of(context).size.height * .5,
                         child: const Center(
-                          child: CupertinoActivityIndicator(color: kDefaultColor,)
-                        ),
+                            child: CupertinoActivityIndicator(
+                          color: kDefaultColor,
+                        )),
                       );
                     } else {
                       if (dataSnapshot.error != null) {
@@ -170,16 +172,17 @@ class _CartScreenState extends State<CartScreen> {
                             builder: (context, cartData, child) {
                           double subtotal = calculateSubtotal(cartData.items);
                           double tax = calculateTax(
-                              subtotal, _cartTools!.courseSellingTax);
+                              subtotal, _cartTools?.courseSellingTax ?? '0');
                           double total = subtotal + tax;
                           return Column(
                             children: [
-                              
                               Container(
-                                padding: const EdgeInsets.symmetric(vertical: 10),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
                                 child: ListView.builder(
                                     shrinkWrap: true,
-                                    physics: const NeverScrollableScrollPhysics(),
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
                                     itemCount: cartData.items.length,
                                     itemBuilder: (ctx, index) {
                                       return Container(
@@ -194,8 +197,8 @@ class _CartScreenState extends State<CartScreen> {
                                           ],
                                         ),
                                         child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(bottom: 7.0),
+                                          padding: const EdgeInsets.only(
+                                              bottom: 7.0),
                                           child: Card(
                                             color: Colors.white,
                                             shape: RoundedRectangleBorder(
@@ -208,8 +211,9 @@ class _CartScreenState extends State<CartScreen> {
                                                 Expanded(
                                                   flex: 3,
                                                   child: Padding(
-                                                    padding: const EdgeInsets.all(
-                                                        10.0),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            10.0),
                                                     child: ClipRRect(
                                                       borderRadius:
                                                           BorderRadius.circular(
@@ -229,21 +233,24 @@ class _CartScreenState extends State<CartScreen> {
                                                   flex: 4,
                                                   child: Column(
                                                     crossAxisAlignment:
-                                                        CrossAxisAlignment.start,
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
                                                       // Text(cartData.items[index].price_cart.toString()),
                                                       Padding(
-                                                        padding: const EdgeInsets
-                                                            .symmetric(
-                                                            horizontal: 5.0,
-                                                            vertical: 5),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal: 5.0,
+                                                                vertical: 5),
                                                         child: Row(
                                                           children: [
                                                             Expanded(
                                                               flex: 1,
                                                               child: Text(
                                                                 cartData
-                                                                    .items[index]
+                                                                    .items[
+                                                                        index]
                                                                     .title
                                                                     .toString(),
                                                                 maxLines: 2,
@@ -261,7 +268,8 @@ class _CartScreenState extends State<CartScreen> {
                                                             ),
                                                             IconButton(
                                                               padding:
-                                                                  EdgeInsets.zero,
+                                                                  EdgeInsets
+                                                                      .zero,
                                                               visualDensity:
                                                                   VisualDensity
                                                                       .compact,
@@ -295,8 +303,7 @@ class _CartScreenState extends State<CartScreen> {
                                                                               .pop();
                                                                         },
                                                                         textColor:
-                                                                            Theme.of(context)
-                                                                                .primaryColor,
+                                                                            Theme.of(context).primaryColor,
                                                                         child:
                                                                             const Text(
                                                                           'No',
@@ -319,8 +326,7 @@ class _CartScreenState extends State<CartScreen> {
                                                                               true);
                                                                         },
                                                                         textColor:
-                                                                            Theme.of(context)
-                                                                                .primaryColor,
+                                                                            Theme.of(context).primaryColor,
                                                                         child:
                                                                             const Text(
                                                                           'Yes',
@@ -360,7 +366,8 @@ class _CartScreenState extends State<CartScreen> {
                                                             style: TextStyle(
                                                               fontSize: 12,
                                                               fontWeight:
-                                                                  FontWeight.w400,
+                                                                  FontWeight
+                                                                      .w400,
                                                               color:
                                                                   kGreyLightColor,
                                                             ),
@@ -370,31 +377,35 @@ class _CartScreenState extends State<CartScreen> {
                                                             style: TextStyle(
                                                               fontSize: 12,
                                                               fontWeight:
-                                                                  FontWeight.w400,
+                                                                  FontWeight
+                                                                      .w400,
                                                               color:
                                                                   kGreyLightColor,
                                                             ),
                                                           ),
                                                         ],
                                                       ),
-                                                      const SizedBox(height: 10),
+                                                      const SizedBox(
+                                                          height: 10),
                                                       Align(
-                                                        alignment:
-                                                            Alignment.bottomRight,
+                                                        alignment: Alignment
+                                                            .bottomRight,
                                                         child: Padding(
                                                           padding:
                                                               const EdgeInsets
                                                                   .only(
                                                                   right: 10.0),
                                                           child: Text(
-                                                            cartData.items[index]
+                                                            cartData
+                                                                .items[index]
                                                                 .price
                                                                 .toString(),
                                                             style:
                                                                 const TextStyle(
                                                               fontSize: 22,
                                                               fontWeight:
-                                                                  FontWeight.w500,
+                                                                  FontWeight
+                                                                      .w500,
                                                             ),
                                                           ),
                                                         ),
@@ -552,8 +563,8 @@ class _CartScreenState extends State<CartScreen> {
                                                           .getInstance();
                                                   final emailPre =
                                                       prefs.getString('email');
-                                                  final passwordPre =
-                                                      prefs.getString('password');
+                                                  final passwordPre = prefs
+                                                      .getString('password');
                                                   var email = emailPre;
                                                   var password = passwordPre;
                                                   print(email);
@@ -567,7 +578,7 @@ class _CartScreenState extends State<CartScreen> {
                                                                   .millisecondsSinceEpoch /
                                                               1000)
                                                           .floor();
-          
+
                                                   String authToken =
                                                       'Basic ${base64Encode(utf8.encode('$email:$password:$currentTimestamp'))}';
                                                   // print(authToken);
@@ -575,7 +586,7 @@ class _CartScreenState extends State<CartScreen> {
                                                       '$baseUrl/payment/web_redirect_to_pay_fee?auth=$authToken&unique_id=academylaravelbycreativeitem';
                                                   // print(url);
                                                   // _launchURL(url);
-          
+
                                                   if (await canLaunchUrl(
                                                       Uri.parse(url))) {
                                                     await launchUrl(
@@ -593,7 +604,8 @@ class _CartScreenState extends State<CartScreen> {
                                                 textColor: Colors.white,
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius:
-                                                      BorderRadius.circular(13.0),
+                                                      BorderRadius.circular(
+                                                          13.0),
                                                   side: const BorderSide(
                                                       color: kDefaultColor),
                                                 ),

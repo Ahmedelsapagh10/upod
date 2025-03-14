@@ -488,6 +488,7 @@ class _CourseDetailScreen1State extends State<CourseDetailScreen1>
                                 width: 45,
                                 child: FittedBox(
                                   child: FloatingActionButton(
+                                    heroTag: "btn3",
                                     onPressed: () {
                                       if (_isAuth) {
                                         var msg = loadedCourse.isWishlisted;
@@ -953,6 +954,7 @@ class _CourseDetailScreen1State extends State<CourseDetailScreen1>
         margin: const EdgeInsets.only(bottom: 15.0),
         padding: const EdgeInsets.only(right: 10.0, bottom: 18),
         child: FloatingActionButton(
+          heroTag: "btn4",
           onPressed: () {
             Navigator.push(
                 context,
