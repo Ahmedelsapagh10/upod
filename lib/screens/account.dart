@@ -1,8 +1,8 @@
-
 // ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'dart:convert';
 
+import 'package:academy_lms_app/features/chat/screen/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -138,7 +138,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                 final result = await Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => const EditPrfileScreen(),
+                                      builder: (context) =>
+                                          const EditPrfileScreen(),
                                     ));
 
                                 if (result == true) {
@@ -146,6 +147,28 @@ class _AccountScreenState extends State<AccountScreen> {
                                     _dataUpdated = true;
                                   });
                                 }
+                              },
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 65,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 10, right: 10),
+                            child: GestureDetector(
+                              child: const AccountListTile(
+                                titleText: 'Chat',
+                                isChat: true,
+                                icon: 'assets/icons/profile.svg',
+                                actionType: 'edit',
+                              ),
+                              onTap: () async {
+                                final result = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const MainRoomsScreen(),
+                                    ));
                               },
                             ),
                           ),
@@ -158,7 +181,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             height: 5,
                           ),
                         ),
-                      SizedBox(
+                        SizedBox(
                           height: 65,
                           child: Padding(
                             padding: const EdgeInsets.only(left: 10, right: 10),

@@ -1,15 +1,19 @@
 import 'dart:io';
 
+import 'package:academy_lms_app/features/chat/cubit/chat_cubit.dart';
 import 'package:academy_lms_app/screens/course_details.dart';
 import 'package:academy_lms_app/screens/login.dart';
 import 'package:academy_lms_app/screens/splash.dart';
 import 'package:academy_lms_app/screens/tab_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 
+import 'features/chat/data/chatrepository.dart';
+import 'features/chat/data/chatwebservices.dart';
 import 'providers/auth.dart';
 import 'providers/categories.dart';
 import 'providers/courses.dart';
@@ -73,30 +77,37 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: Consumer<Auth>(
-        builder: (ctx, auth, _) => MaterialApp(
-          title: 'UPOD',
-          theme: ThemeData(
-            fontFamily: 'Poppins',
-            visualDensity: VisualDensity.adaptivePlatformDensity,
-
-            // colorScheme: const ColorScheme.light(primary: kWhiteColor),
-            useMaterial3: true,
+        builder: (ctx, auth, _) => BlocProvider(
+          create: (context) => ChatCubit(
+            ChatRepository(ChatWebServices()),
           ),
-          debugShowCheckedModeBanner: false,
-          home: const SplashScreen(),
-          routes: {
-            '/home': (ctx) => const TabsScreen(
-                  pageIndex: 0,
-                ),
-            '/login': (ctx) => const LoginScreen(),
-            CoursesScreen.routeName: (ctx) => const CoursesScreen(),
-            CategoryDetailsScreen.routeName: (ctx) =>
-                const CategoryDetailsScreen(),
-            CourseDetailScreen.routeName: (ctx) => const CourseDetailScreen(),
-            CourseDetailScreen1.routeName: (ctx) => const CourseDetailScreen1(),
-            SubCategoryScreen.routeName: (ctx) => const SubCategoryScreen(),
-            AccountRemoveScreen.routeName: (ctx) => const AccountRemoveScreen(),
-          },
+          child: MaterialApp(
+            title: 'UPOD',
+            theme: ThemeData(
+              fontFamily: 'Poppins',
+              visualDensity: VisualDensity.adaptivePlatformDensity,
+
+              // colorScheme: const ColorScheme.light(primary: kWhiteColor),
+              useMaterial3: true,
+            ),
+            debugShowCheckedModeBanner: false,
+            home: const SplashScreen(),
+            routes: {
+              '/home': (ctx) => const TabsScreen(
+                    pageIndex: 0,
+                  ),
+              '/login': (ctx) => const LoginScreen(),
+              CoursesScreen.routeName: (ctx) => const CoursesScreen(),
+              CategoryDetailsScreen.routeName: (ctx) =>
+                  const CategoryDetailsScreen(),
+              CourseDetailScreen.routeName: (ctx) => const CourseDetailScreen(),
+              CourseDetailScreen1.routeName: (ctx) =>
+                  const CourseDetailScreen1(),
+              SubCategoryScreen.routeName: (ctx) => const SubCategoryScreen(),
+              AccountRemoveScreen.routeName: (ctx) =>
+                  const AccountRemoveScreen(),
+            },
+          ),
         ),
       ),
     );

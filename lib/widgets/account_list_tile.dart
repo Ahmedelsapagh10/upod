@@ -1,5 +1,7 @@
 // ignore_for_file: unused_element
 
+import 'package:academy_lms_app/constants.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -10,11 +12,12 @@ class AccountListTile extends StatelessWidget {
   final String? icon;
   final String? actionType;
   final String? courseAccessibility;
-
+  final bool isChat;
   const AccountListTile({
     super.key,
     @required this.titleText,
     @required this.icon,
+    this.isChat = false,
     @required this.actionType,
     this.courseAccessibility,
   });
@@ -29,9 +32,14 @@ class AccountListTile extends StatelessWidget {
       leading: Padding(
         padding: const EdgeInsets.all(6),
         child: FittedBox(
-          child: SvgPicture.asset(
-            icon!,
-          ),
+          child: isChat
+              ? Icon(
+                  CupertinoIcons.chat_bubble_text_fill,
+                  color: kDefaultColor,
+                )
+              : SvgPicture.asset(
+                  icon!,
+                ),
         ),
       ),
       title: CustomText(
