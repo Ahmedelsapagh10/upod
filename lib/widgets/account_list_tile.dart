@@ -39,6 +39,7 @@ class AccountListTile extends StatelessWidget {
                 )
               : SvgPicture.asset(
                   icon!,
+                  color: kDefaultColor,
                 ),
         ),
       ),

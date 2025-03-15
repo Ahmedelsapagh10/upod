@@ -15,6 +15,7 @@ import '../data/models/message_model.dart';
 
 import '../data/models/messages_room_model.dart';
 import '../data/models/rooms_model.dart';
+import '../data/models/user_data_model.dart';
 import 'chat_state.dart';
 
 class ChatCubit extends Cubit<ChatState> {
@@ -179,5 +180,17 @@ class ChatCubit extends Cubit<ChatState> {
         print('Error decoding user details: $e');
       }
     }
+  }
+
+  //! Wallet and Points
+  MainUserDataModel? mainUserDataModel;
+  getMyUserData() async {
+    emit(LoadingGetUserDataState());
+    chatRepository.getMyUserData().then((e) {
+      mainUserDataModel = e;
+      emit(LoadedGetUserDataState());
+    }).onError((error, stackTrace) {
+      emit(ErrorGetUserDataState());
+    });
   }
 }

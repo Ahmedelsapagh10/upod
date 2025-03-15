@@ -68,3 +68,9 @@ class LoadingDeleteRoomWithId extends ChatState {}
 class LoadedDeleteRoomWithId extends ChatState {}
 
 class ErrorDeleteRoomWithId extends ChatState {}
+
+class LoadingGetUserDataState extends ChatState {}
+
+class LoadedGetUserDataState extends ChatState {}
+
+class ErrorGetUserDataState extends ChatState {}

@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants.dart';
+import '../features/wallet_points/wallet_points_screen.dart';
 import '../providers/auth.dart';
 import '../widgets/account_list_tile.dart';
 import '../widgets/custom_text.dart';
@@ -163,11 +164,32 @@ class _AccountScreenState extends State<AccountScreen> {
                                 actionType: 'edit',
                               ),
                               onTap: () async {
-                                final result = await Navigator.push(
+                                await Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
                                           const MainRoomsScreen(),
+                                    ));
+                              },
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 65,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 10, right: 10),
+                            child: GestureDetector(
+                              child: const AccountListTile(
+                                titleText: 'My Balance',
+                                icon: 'assets/icons/my_balance.svg',
+                                actionType: 'edit',
+                              ),
+                              onTap: () async {
+                                await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const MyWalletAndPointsScreen(),
                                     ));
                               },
                             ),

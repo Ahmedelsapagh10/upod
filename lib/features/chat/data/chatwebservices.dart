@@ -106,4 +106,15 @@ class ChatWebServices {
       return {};
     }
   }
+
+  Future<dynamic> getMyUserData() async {
+    try {
+      Response response = await dio.get(
+        '/api/getUser',
+      );
+      return response.data;
+    } catch (e) {
+      return {};
+    }
+  }
 }

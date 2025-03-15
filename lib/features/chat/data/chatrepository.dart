@@ -5,6 +5,7 @@ import 'models/message_model.dart';
 import 'models/messages_room_model.dart';
 import 'models/register_message.dart';
 import 'models/rooms_model.dart';
+import 'models/user_data_model.dart';
 
 class ChatRepository {
   ChatWebServices chatWebServices;
@@ -32,5 +33,10 @@ class ChatRepository {
     final res = await chatWebServices.messageRegister(
         chatImage: chatImage, receiverId: receiverId, content: content);
     return MainMessagesRegisterModel.fromJson(res);
+  }
+
+  Future<MainUserDataModel> getMyUserData() async {
+    final res = await chatWebServices.getMyUserData();
+    return MainUserDataModel.fromJson(res);
   }
 }
