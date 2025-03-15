@@ -11,6 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
+import 'package:screenshot_callback/screenshot_callback.dart';
 
 import 'features/chat/data/chatrepository.dart';
 import 'features/chat/data/chatwebservices.dart';
@@ -33,6 +34,7 @@ void main() {
   // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
   //     .then((_) {
   runApp(MyApp());
+
   WidgetsBinding.instance.addPostFrameCallback((timestamp) async {
     if (Platform.isAndroid) {
       await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
@@ -41,8 +43,30 @@ void main() {
   // });
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  ScreenshotCallback screenshotCallback = ScreenshotCallback();
+
+  @override
+  void initState() {
+    super.initState();
+    screenshotCallback.addListener(() {
+      print("Screenshot taken!");
+      // Show a warning or take action
+    });
+  }
+
+  @override
+  void dispose() {
+    screenshotCallback.dispose();
+    super.dispose();
+  }
 
   // This widget is the root of your application.
   @override
