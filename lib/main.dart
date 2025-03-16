@@ -12,7 +12,6 @@ import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 
-
 import 'features/chat/data/chatrepository.dart';
 import 'features/chat/data/chatwebservices.dart';
 import 'providers/auth.dart';
@@ -51,10 +50,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
-
-
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -124,6 +119,3 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-
-
-
