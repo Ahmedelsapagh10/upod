@@ -67,7 +67,7 @@ dependencies:
   flutter_image_compress: ^2.4.0
   pretty_dio_logger: ^1.4.0
   intl: ^0.20.2
-  screenshot_callback: ^3.0.1
+#  screenshot_callback: ^3.0.1
   # vimeo_video_player: ^0.0.16
 
 

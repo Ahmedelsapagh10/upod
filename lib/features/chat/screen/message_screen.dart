@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:academy_lms_app/constants.dart';
 import 'package:academy_lms_app/features/chat/cubit/chat_cubit.dart';
 import 'package:academy_lms_app/features/chat/cubit/chat_state.dart';
@@ -21,14 +23,25 @@ class MessageScreen extends StatefulWidget {
 }
 
 class _MessageScreenState extends State<MessageScreen> {
+  late Timer _timer;
+
   @override
   void initState() {
+    super.initState();
     context.read<ChatCubit>().mainMessageModel?.data?.messages = [];
     if (widget.roomId != null) {
       context.read<ChatCubit>().getMessagesList(room: widget.roomId ?? '');
     }
 
-    super.initState();
+    _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      context.read<ChatCubit>().getMessagesList(room: widget.roomId ?? '');
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
   }
 
   @override
@@ -66,12 +79,14 @@ class _MessageScreenState extends State<MessageScreen> {
               body: Column(
                 children: [
                   Flexible(
-                      child: (state is LoadingGetMessagesList ||
-                              cubit.mainMessageModel == null)
-                          ? Center(
-                              child: CircularProgressIndicator(),
-                            )
-                          : cubit.mainMessageModel?.data?.messages?.length == 0
+                      child:
+                          // (state is LoadingGetMessagesList ||
+                          //         cubit.mainMessageModel == null)
+                          //     ? Center(
+                          //         child: CircularProgressIndicator(),
+                          //       )
+                          //     :
+                          cubit.mainMessageModel?.data?.messages?.length == 0
                               ? Center(
                                   child: Text('No Messages',
                                       style: TextStyle(
