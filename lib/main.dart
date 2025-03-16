@@ -11,8 +11,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
-import 'package:screenshot_callback/screenshot_callback.dart';
-
 import 'features/chat/data/chatrepository.dart';
 import 'features/chat/data/chatwebservices.dart';
 import 'providers/auth.dart';
@@ -51,22 +49,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  ScreenshotCallback screenshotCallback = ScreenshotCallback();
 
-  @override
-  void initState() {
-    super.initState();
-    screenshotCallback.addListener(() {
-      print("Screenshot taken!");
-      // Show a warning or take action
-    });
-  }
 
-  @override
-  void dispose() {
-    screenshotCallback.dispose();
-    super.dispose();
-  }
+
 
   // This widget is the root of your application.
   @override
@@ -137,3 +122,6 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+
+
+
