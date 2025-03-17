@@ -30,7 +30,7 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace "com.topbusiness.lms"
-    compileSdkVersion 31
+    compileSdkVersion 34
     ndkVersion flutter.ndkVersion
 
     compileOptions {

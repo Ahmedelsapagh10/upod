@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../widgets/common_functions.dart';
 import '../../widgets/custom_text.dart';
 
 class MyWalletAndPointsScreen extends StatefulWidget {
@@ -34,6 +35,81 @@ class _MyWalletAndPointsScreenState extends State<MyWalletAndPointsScreen> {
           appBar: AppBar(
             title: Text('My Balance'),
           ),
+          floatingActionButton: FloatingActionButton.extended(
+              backgroundColor: kIndigoColor,
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return BlocBuilder<ChatCubit, ChatState>(
+                      builder: (context, state) {
+                        return AlertDialog(
+                          title: SizedBox(
+                            width: double.infinity,
+                            child: Text(
+                              'Enter Your Wallet Code',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          content: SizedBox(
+                            width: double.infinity,
+                            child: TextField(
+                              controller: cubit.codeController,
+                              decoration: InputDecoration(
+                                  hintText: 'Enter Your Wallet Code',
+                                  border: OutlineInputBorder(),
+                                  contentPadding:
+                                      EdgeInsets.symmetric(horizontal: 3)),
+                            ),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                cubit.codeController.clear();
+
+                                Navigator.pop(context);
+                              },
+                              child: Text('Cancel'),
+                            ),
+                            (state is LoadingChargeWalletState)
+                                ? Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: CircularProgressIndicator(),
+                                  )
+                                : ElevatedButton(
+                                    onPressed: () {
+                                      if (state is! LoadingChargeWalletState) {
+                                        if (cubit.codeController.text.isEmpty) {
+                                          CommonFunctions.showWarningToast(
+                                              'Enter Your Wallet Code');
+                                        } else {
+                                          cubit.chargeMyWallet(context);
+                                        }
+                                      }
+                                    },
+                                    child: Text(
+                                      'Save',
+                                      style: TextStyle(color: kPrimaryColor),
+                                    ),
+                                  ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+              label: Text(
+                'Charge your wallet',
+                style: TextStyle(
+                  color: kWhiteColor,
+                ),
+              )),
           body: (state is LoadingGetUserDataState ||
                   cubit.mainUserDataModel == null)
               ? Center(
@@ -64,12 +140,8 @@ class _MyWalletAndPointsScreenState extends State<MyWalletAndPointsScreen> {
                               padding: const EdgeInsets.all(5.0),
                               child: CircleAvatar(
                                 radius: 55,
-                                backgroundImage: cubit
-                                            .mainUserDataModel?.data?.phone !=
-                                        null
-                                    ? NetworkImage(
-                                        cubit.mainUserDataModel?.data?.phone)
-                                    : null,
+                                backgroundImage: NetworkImage(
+                                    cubit.mainUserDataModel?.data?.photo ?? ''),
                                 backgroundColor: kDefaultColor,
                               ),
                             ),

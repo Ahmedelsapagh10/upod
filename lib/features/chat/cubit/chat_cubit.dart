@@ -193,4 +193,24 @@ class ChatCubit extends Cubit<ChatState> {
       emit(ErrorGetUserDataState());
     });
   }
+
+  TextEditingController codeController = TextEditingController();
+
+  chargeMyWallet(BuildContext context) async {
+    emit(LoadingChargeWalletState());
+    chatRepository.chargeMyWallet(codeController.text).then((e) {
+      if (e.status == true) {
+        CommonFunctions.showSuccessToast(e.message ?? '');
+        getMyUserData();
+        codeController.clear();
+        Navigator.pop(context);
+        emit(LoadedChargeWalletState());
+      } else {
+        CommonFunctions.showWarningToast(e.message ?? '');
+        emit(ErrorChargeWalletState());
+      }
+    }).onError((error, stackTrace) {
+      emit(ErrorChargeWalletState());
+    });
+  }
 }

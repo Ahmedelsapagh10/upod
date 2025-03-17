@@ -117,4 +117,16 @@ class ChatWebServices {
       return {};
     }
   }
+
+  Future<dynamic> chargeMyWallet(String code) async {
+    try {
+      Response response = await dio.post(
+        '/api/charge-wallet',
+        data: FormData.fromMap({"code": code}),
+      );
+      return response.data;
+    } catch (e) {
+      return {};
+    }
+  }
 }

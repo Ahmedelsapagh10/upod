@@ -74,3 +74,9 @@ class LoadingGetUserDataState extends ChatState {}
 class LoadedGetUserDataState extends ChatState {}
 
 class ErrorGetUserDataState extends ChatState {}
+
+class LoadingChargeWalletState extends ChatState {}
+
+class LoadedChargeWalletState extends ChatState {}
+
+class ErrorChargeWalletState extends ChatState {}
