@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:academy_lms_app/constants.dart';
 import 'package:academy_lms_app/features/chat/cubit/chat_cubit.dart';
 import 'package:academy_lms_app/features/chat/cubit/chat_state.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -171,138 +172,148 @@ class _MyWalletAndPointsScreenState extends State<MyWalletAndPointsScreen> {
                           colors: kGreyLightColor,
                         ),
                         const SizedBox(height: 15),
-                        Container(
-                          margin:
-                              EdgeInsets.symmetric(vertical: 12, horizontal: 5),
-                          height: 113,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: kWhiteColor,
-                              boxShadow: [
-                                BoxShadow(
-                                  offset: Offset(1, 1),
-                                  spreadRadius: 1,
-                                  blurRadius: 2,
-                                  color: kGreyLight2Color,
-                                )
-                              ]),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Row(
-                                  children: [
-                                    Padding(
-                                        padding:
-                                            const EdgeInsetsDirectional.only(
-                                                end: 5.0),
-                                        child: CircleAvatar(
-                                            backgroundColor: kDefaultColor,
-                                            child: Icon(
-                                              Icons.wallet,
-                                              color: kWhiteColor,
-                                              size: 24,
-                                            ))),
-                                    Flexible(
-                                        child: Text(
-                                      "My Wallet",
-                                      maxLines: 1,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 20),
-                                    ))
-                                  ],
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 5.0),
-                                  child: Row(
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                margin: EdgeInsets.symmetric(
+                                    vertical: 12, horizontal: 5),
+                                height: 113,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: kWhiteColor,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        offset: Offset(1, 1),
+                                        spreadRadius: 1,
+                                        blurRadius: 2,
+                                        color: kGreyLight2Color,
+                                      )
+                                    ]),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Flexible(
-                                        child: Text(
-                                          '${cubit.mainUserDataModel?.data?.wallet.toString() ?? ''} ',
-                                          maxLines: 1,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 20,
-                                          ),
-                                        ),
+                                      Row(
+                                        children: [
+                                          Padding(
+                                              padding:
+                                                  const EdgeInsetsDirectional
+                                                      .only(end: 5.0),
+                                              child: CircleAvatar(
+                                                  backgroundColor:
+                                                      kDefaultColor,
+                                                  child: Icon(
+                                                    Icons.wallet,
+                                                    color: kWhiteColor,
+                                                    size: 24,
+                                                  ))),
+                                          Flexible(
+                                              child: AutoSizeText(
+                                            "My Wallet",
+                                            maxLines: 1,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 20),
+                                          ))
+                                        ],
                                       ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 5.0),
+                                        child: Row(
+                                          children: [
+                                            Flexible(
+                                              child: AutoSizeText(
+                                                '${cubit.mainUserDataModel?.data?.wallet.toString() ?? ''} ',
+                                                maxLines: 1,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 20,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
                                     ],
                                   ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin:
-                              EdgeInsets.symmetric(vertical: 12, horizontal: 5),
-                          height: 113,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: kWhiteColor,
-                              boxShadow: [
-                                BoxShadow(
-                                  offset: Offset(1, 1),
-                                  spreadRadius: 1,
-                                  blurRadius: 2,
-                                  color: kGreyLight2Color,
-                                )
-                              ]),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Row(
-                                  children: [
-                                    Padding(
-                                        padding:
-                                            const EdgeInsetsDirectional.only(
-                                                end: 5.0),
-                                        child: CircleAvatar(
-                                            backgroundColor: kDefaultColor,
-                                            child: Icon(
-                                              Icons.school_rounded,
-                                              color: kWhiteColor,
-                                              size: 24,
-                                            ))),
-                                    Flexible(
-                                        child: Text(
-                                      "Points",
-                                      maxLines: 1,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 20),
-                                    ))
-                                  ],
                                 ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 5.0),
-                                  child: Row(
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                margin: EdgeInsets.symmetric(
+                                    vertical: 12, horizontal: 5),
+                                height: 113,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: kWhiteColor,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        offset: Offset(1, 1),
+                                        spreadRadius: 1,
+                                        blurRadius: 2,
+                                        color: kGreyLight2Color,
+                                      )
+                                    ]),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Flexible(
-                                        child: Text(
-                                          '${cubit.mainUserDataModel?.data?.points.toString() ?? ''} ',
-                                          maxLines: 1,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 20,
-                                          ),
-                                        ),
+                                      Row(
+                                        children: [
+                                          Padding(
+                                              padding:
+                                                  const EdgeInsetsDirectional
+                                                      .only(end: 5.0),
+                                              child: CircleAvatar(
+                                                  backgroundColor:
+                                                      kDefaultColor,
+                                                  child: Icon(
+                                                    Icons.school_rounded,
+                                                    color: kWhiteColor,
+                                                    size: 24,
+                                                  ))),
+                                          Flexible(
+                                              child: AutoSizeText(
+                                            "Points",
+                                            maxLines: 1,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 20),
+                                          ))
+                                        ],
                                       ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 5.0),
+                                        child: Row(
+                                          children: [
+                                            Flexible(
+                                              child: AutoSizeText(
+                                                '${cubit.mainUserDataModel?.data?.points.toString() ?? ''} ',
+                                                maxLines: 1,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 20,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
                                     ],
                                   ),
-                                )
-                              ],
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
+                          ],
+                        )
                       ],
                     ),
                   ),
