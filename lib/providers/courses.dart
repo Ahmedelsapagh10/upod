@@ -116,10 +116,11 @@ class Courses with ChangeNotifier {
       String selectedCategory,
       String selectedPrice,
       String selectedLevel,
+      String keywordController,
       String selectedLanguage,
       String selectedRating) async {
     var url =
-        '$baseUrl/api/filter_course?selected_category=$selectedCategory&selected_price=$selectedPrice&selected_level=$selectedLevel&selected_language=$selectedLanguage&selected_rating=$selectedRating&selected_search_string=';
+        '$baseUrl/api/filter_course?selected_category=$selectedCategory&selected_price=$selectedPrice&selected_level=$selectedLevel&selected_language=$selectedLanguage&selected_rating=$selectedRating&selected_search_string=$keywordController';
     // print(url);
     try {
       final response = await http.get(Uri.parse(url));

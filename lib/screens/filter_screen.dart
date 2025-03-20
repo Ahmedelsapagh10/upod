@@ -97,14 +97,16 @@ class _FilterScreenState extends State<FilterScreen> {
             _selectedPrice,
             _selectedLevel,
             _selectedLanguage,
-            _selectedRating);
+            _selectedRating,
+            _keywordController.text);
       } else {
         await Provider.of<Courses>(context, listen: false).filterCourses(
             _selectedCategory,
             _selectedPrice,
             _selectedLevel,
             _selectedLanguage,
-            _selectedRating);
+            _selectedRating,
+            _keywordController.text);
       }
       Navigator.of(context).pushNamed(
         CoursesScreen.routeName,

@@ -4,7 +4,7 @@ import 'package:academy_lms_app/constants.dart';
 import 'package:academy_lms_app/screens/account.dart';
 import 'package:academy_lms_app/screens/cart.dart';
 import 'package:academy_lms_app/screens/filter_screen.dart';
-import 'package:academy_lms_app/screens/home.dart';
+import 'package:academy_lms_app/features/home/screen/home.dart';
 import 'package:academy_lms_app/screens/login.dart';
 import 'package:academy_lms_app/screens/my_courses.dart';
 import 'package:academy_lms_app/widgets/appbar_one.dart';

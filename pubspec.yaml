@@ -54,7 +54,7 @@ dependencies:
   universal_html: ^2.2.4
   flutter_html: ^3.0.0-beta.2
   webview_flutter: ^4.4.4
-  url_launcher: ^6.3.0
+  url_launcher: ^6.3.1
   logging: ^1.2.0
   video_player: ^2.9.1
   youtube_player_flutter: ^9.1.1
@@ -68,6 +68,9 @@ dependencies:
   pretty_dio_logger: ^1.4.0
   intl: ^0.20.2
   auto_size_text: ^3.0.0
+  # story_view: ^0.16.5
+  story: ^1.1.0
+  carousel_slider: ^5.0.0
 
 #  screenshot_callback: ^3.0.1
 

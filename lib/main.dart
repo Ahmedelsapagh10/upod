@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:academy_lms_app/features/chat/cubit/chat_cubit.dart';
+import 'package:academy_lms_app/features/home/data/repo.dart';
 import 'package:academy_lms_app/screens/course_details.dart';
 import 'package:academy_lms_app/screens/login.dart';
 import 'package:academy_lms_app/screens/splash.dart';
@@ -14,6 +15,8 @@ import 'package:provider/provider.dart';
 
 import 'features/chat/data/chatrepository.dart';
 import 'features/chat/data/chatwebservices.dart';
+import 'features/home/cubit/home_cubit.dart';
+import 'features/home/data/services.dart';
 import 'providers/auth.dart';
 import 'providers/categories.dart';
 import 'providers/courses.dart';
@@ -83,10 +86,15 @@ class _MyAppState extends State<MyApp> {
         ),
       ],
       child: Consumer<Auth>(
-        builder: (ctx, auth, _) => BlocProvider(
-          create: (context) => ChatCubit(
-            ChatRepository(ChatWebServices()),
-          ),
+        builder: (ctx, auth, _) => MultiBlocProvider(
+          providers: [
+            BlocProvider(
+                create: (context) =>
+                    ChatCubit(ChatRepository(ChatWebServices()))),
+            BlocProvider(
+              create: (context) => HomeCubit(HomeRepo(HomeServices())),
+            ),
+          ],
           child: MaterialApp(
             title: 'UPOD',
             theme: ThemeData(
