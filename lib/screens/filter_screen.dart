@@ -93,7 +93,7 @@ class _FilterScreenState extends State<FilterScreen> {
     try {
       if (_selectedSubCat != null) {
         await Provider.of<Courses>(context, listen: false).filterCourses(
-            _selectedSubCat!,
+            _selectedSubCat ?? 'all',
             _selectedPrice,
             _selectedLevel,
             _selectedLanguage,
@@ -112,7 +112,7 @@ class _FilterScreenState extends State<FilterScreen> {
         CoursesScreen.routeName,
         arguments: {
           'category_id': null,
-          'search_query': null,
+          'search_query': _keywordController.text,
           'type': CoursesPageData.filter,
         },
       );

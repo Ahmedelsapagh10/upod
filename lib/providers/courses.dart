@@ -95,7 +95,7 @@ class Courses with ChangeNotifier {
   Future<void> fetchCoursesBySearchQuery(String searchQuery) async {
     var url =
         '$baseUrl/api/courses_by_search_string?search_string=$searchQuery';
-    // print(url);
+    print("xx $url");
     try {
       final response = await http.get(Uri.parse(url));
       final extractedData = json.decode(response.body) as List;
@@ -116,12 +116,12 @@ class Courses with ChangeNotifier {
       String selectedCategory,
       String selectedPrice,
       String selectedLevel,
-      String keywordController,
       String selectedLanguage,
-      String selectedRating) async {
+      String selectedRating,
+      String keywordController) async {
     var url =
         '$baseUrl/api/filter_course?selected_category=$selectedCategory&selected_price=$selectedPrice&selected_level=$selectedLevel&selected_language=$selectedLanguage&selected_rating=$selectedRating&selected_search_string=$keywordController';
-    // print(url);
+    print("00000000000000000000000 $url");
     try {
       final response = await http.get(Uri.parse(url));
       final extractedData = json.decode(response.body) as List;
