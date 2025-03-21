@@ -37,11 +37,11 @@ void main() {
   //     .then((_) {
   runApp(MyApp());
 
-  // WidgetsBinding.instance.addPostFrameCallback((timestamp) async {
-  //   if (Platform.isAndroid) {
-  //     await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
-  //   }
-  // });
+  WidgetsBinding.instance.addPostFrameCallback((timestamp) async {
+    if (Platform.isAndroid) {
+      await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+    }
+  });
   // });
 }
 
