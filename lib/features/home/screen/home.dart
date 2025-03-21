@@ -59,6 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       setState(() {});
       await Provider.of<Courses>(context, listen: false).fetchTopCourses();
+      context.read<HomeCubit>().getSlidersAndStories(context);
 
       setState(() {
         topCourses = Provider.of<Courses>(context, listen: false).topItems;
