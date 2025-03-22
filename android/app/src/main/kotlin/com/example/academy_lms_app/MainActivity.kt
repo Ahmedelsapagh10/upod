@@ -1,4 +1,4 @@
-package com.topbusiness.lms
+package com.topbusiness.upod
 
 import io.flutter.embedding.android.FlutterActivity
 
