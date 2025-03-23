@@ -122,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             //! Stories
 
-                            cubit.mainStoryAndSliderModel?.stories?.length == 0
+                          (  cubit.mainStoryAndSliderModel?.stories?.length == 0|| cubit.mainStoryAndSliderModel==null)
                                 ? Container()
                                 : SizedBox(
                                     height:
@@ -179,9 +179,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                             //! Slider
 
-                            cubit.mainStoryAndSliderModel?.sliders?.length == 0
+                            (  cubit.mainStoryAndSliderModel?.stories?.length == 0|| cubit.mainStoryAndSliderModel==null)
                                 ? Container()
-                                : CarouselSlider(
+                                :  CarouselSlider(
                                     options: CarouselOptions(
                                       height: 200,
                                       autoPlay: true,
