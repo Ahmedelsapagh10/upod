@@ -7,7 +7,7 @@ import './section.dart';
 class CourseDetail {
   int? courseId;
   List<String>? courseIncludes;
-  List<String>? courseRequirements;
+  List<dynamic>? courseRequirements;
   List<String>? courseOutcomes;
   bool? isWishlisted;
   bool? isPurchased;

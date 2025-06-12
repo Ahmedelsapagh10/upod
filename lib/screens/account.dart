@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:academy_lms_app/features/chat/screen/chat_screen.dart';
 import 'package:flutter/material.dart';
@@ -69,7 +70,7 @@ class _AccountScreenState extends State<AccountScreen> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-          height: MediaQuery.of(context).size.height,
+          // height: MediaQuery.of(context).size.height,
           color: kBackGroundColor,
           child: _isLoading
               ? const Center(
@@ -174,6 +175,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             ),
                           ),
                         ),
+                        if (!Platform.isIOS)
                         SizedBox(
                           height: 65,
                           child: Padding(

@@ -13,6 +13,7 @@ class CustomText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text.toString(),
+
       style: TextStyle(
         fontSize: fontSize ?? 16,
         color: colors ?? kSelectItemColor,

@@ -938,8 +938,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
                                                   TabViewDetails(
                                                     titleText:
                                                         'Course Requirements',
-                                                    listText: loadedCourseDetail
-                                                        ?.courseRequirements,
+                                                    listText: loadedCourseDetail?.courseRequirements??[],
                                                   ),
                                                 ],
                                               ),

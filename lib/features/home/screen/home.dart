@@ -89,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
         var cubit = context.read<HomeCubit>();
-        print('##### ${cubit.mainStoryAndSliderModel?.stories?.length}');
+        print('####### stories ${cubit.mainStoryAndSliderModel?.stories?.length}');
         return Container(
           height: MediaQuery.of(context).size.height * 1,
           color: kBackGroundColor,

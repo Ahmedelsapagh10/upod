@@ -4,7 +4,7 @@ import '../constants.dart';
 
 class TabViewDetails extends StatelessWidget {
   final String? titleText;
-  final List<String>? listText;
+  final List<dynamic>? listText;
 
   const TabViewDetails({
     super.key,
@@ -43,7 +43,7 @@ class TabViewDetails extends StatelessWidget {
                   children: <Widget>[
                     const SizedBox(height: 5),
                     CustomText(
-                      text: listText![index],
+                      text: listText![index].toString(),
                       colors: kGreyLightColor,
                       fontSize: 15,
                       fontWeight: FontWeight.w400,

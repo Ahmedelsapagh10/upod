@@ -4,7 +4,7 @@ class Course {
   String? thumbnail;
   String? preview;
   String? price;
-  int? isPaid;
+  dynamic isPaid;
   String? instructor;
   String? instructorImage;
   dynamic total_reviews;

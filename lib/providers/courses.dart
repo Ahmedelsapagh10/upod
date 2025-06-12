@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:academy_lms_app/models/cart_tools_model.dart';
@@ -124,13 +125,17 @@ class Courses with ChangeNotifier {
     print("00000000000000000000000 $url");
     try {
       final response = await http.get(Uri.parse(url));
+
+      log("....${response.body}");
+      if (response.body == null || json.decode(response.body)==[]) {
+        return;
+      }
       final extractedData = json.decode(response.body) as List;
-      // ignore: unnecessary_null_comparison
+      log("extractedData....${extractedData}");
+
       if (extractedData == null) {
         return;
       }
-      // print(extractedData);
-
       _items = buildCourseList(extractedData);
       notifyListeners();
     } catch (error) {
@@ -202,7 +207,7 @@ class Courses with ChangeNotifier {
         preview: courseData['preview'],
         price: courseData['price'],
         price_cart: extractNumber(courseData['price_cart'].toString()),
-        isPaid: courseData['is_paid'],
+        isPaid: courseData['is_paid'].toString(),
         instructor: courseData['instructor_name'],
         instructorImage: courseData['instructor_image'],
         total_reviews: courseData['total_reviews'],
@@ -306,7 +311,8 @@ class Courses with ChangeNotifier {
           print('courseData["requirements"] is not a List');
         }
         loadedCourseDetails.add(CourseDetail(
-          courseId: courseData['id'],
+
+          courseId: int.tryParse(courseData['course_id'].toString() ),
           courseIncludes:
               (courseData['includes'] as List<dynamic>).cast<String>(),
           courseRequirements: courseData['requirements'] is List
@@ -420,7 +426,7 @@ class Courses with ChangeNotifier {
 
     for (var lessonData in extractedLessons) {
       loadedLessons.add(Lesson(
-        id: lessonData['id'],
+        id: int.tryParse(lessonData['id'].toString()),
         title: lessonData['title'],
         duration: lessonData['duration'],
         lessonType: lessonData['lesson_type'],

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:academy_lms_app/features/chat/cubit/chat_cubit.dart';
 import 'package:academy_lms_app/features/home/data/repo.dart';
 import 'package:academy_lms_app/screens/course_details.dart';
@@ -12,7 +11,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
-
 import 'features/chat/data/chatrepository.dart';
 import 'features/chat/data/chatwebservices.dart';
 import 'features/home/cubit/home_cubit.dart';

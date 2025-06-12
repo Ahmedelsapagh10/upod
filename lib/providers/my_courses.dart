@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,26 +33,31 @@ class MyCourses with ChangeNotifier {
   Future<void> fetchMyCourses() async {
     final prefs = await SharedPreferences.getInstance();
     final authToken = (prefs.getString('access_token') ?? '');
-
     print('5555 $authToken');
     var url = '$baseUrl/api/my_courses';
     try {
+      log('77777 $url');
       final response = await http.get(Uri.parse(url), headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'Authorization': 'Bearer $authToken',
       });
-      final extractedData = json.decode(response.body) as List;
-      // ignore: unnecessary_null_comparison
-      if (extractedData.isEmpty || extractedData == null) {
-        return;
-      }
-      // print(extractedData);
+      if(response.statusCode == 200){
+      var extractedData = json.decode(response.body) as List;
+      log('7777799 extractedData ${extractedData.length}');
       _items = buildMyCourseList(extractedData);
       print('5555 _items.length ${_items.length}');
+      }else{
 
+      _items = buildMyCourseList([]);
+
+      }
       notifyListeners();
+
+
     } catch (error) {
+      log('7777799 ${error.toString()}');
+      _items = buildMyCourseList([]);
       rethrow;
     }
   }
