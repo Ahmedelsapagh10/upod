@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:academy_lms_app/features/chat/cubit/chat_cubit.dart';
 import 'package:academy_lms_app/features/home/data/repo.dart';
 import 'package:academy_lms_app/screens/course_details.dart';
@@ -9,10 +8,8 @@ import 'package:academy_lms_app/screens/tab_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
-
 import 'features/chat/data/chatrepository.dart';
 import 'features/chat/data/chatwebservices.dart';
 import 'features/home/cubit/home_cubit.dart';
@@ -27,21 +24,23 @@ import 'screens/category_details.dart';
 import 'screens/course_detail.dart';
 import 'screens/courses_screen.dart';
 import 'screens/sub_category.dart';
-
-void main() {
+import 'package:screen_protector/screen_protector.dart';
+void main() async{
   Logger.root.onRecord.listen((LogRecord rec) {
     debugPrint(
         '${rec.loggerName}>${rec.level.name}: ${rec.time}: ${rec.message}');
   });
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await ScreenProtector.preventScreenshotOn();
+  await ScreenProtector.protectDataLeakageOn();
+
   // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
   //     .then((_) {
   runApp(MyApp());
 
-  WidgetsBinding.instance.addPostFrameCallback((timestamp) async {
-    if (Platform.isAndroid) {
-      await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
-    }
-  });
+
+
   // });
 }
 
